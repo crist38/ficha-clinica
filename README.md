@@ -2,7 +2,7 @@
 
 Sistema web moderno y responsivo para la gestión y registro de fichas clínicas de pacientes. Desarrollado con HTML, CSS vainilla y JavaScript.
 
-![Ficha Médica Preview](https://img.shields.io/badge/Estado-Activo-277E4D) ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![Ficha Médica Preview](https://img.shields.io/badge/Estado-Activo-277E4D) ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black) ![Vercel](https://img.shields.io/badge/Vercel-Ready-black?style=flat&logo=vercel)
 
 ---
 
@@ -31,13 +31,12 @@ La ficha médica recopila la siguiente información:
 
 ---
 
-## 💻 Instalación y Uso
+## 💻 Instalación y Uso Local
 
-No requiere compilación ni dependencias externas. Puedes ejecutarlo localmente de las siguientes maneras:
+No requiere compilación ni dependencias externas:
 
 1. **Abrir directamente:**
-   Simplemente haz doble clic en `index.html` en tu navegador de preferencia.
-
+   Doble clic en `index.html` en tu navegador.
 2. **Servidor local (opcional):**
    ```bash
    npx serve .
@@ -45,9 +44,21 @@ No requiere compilación ni dependencias externas. Puedes ejecutarlo localmente 
 
 ---
 
+## ☁️ Despliegue en Vercel (Recomendado)
+
+El proyecto es **100% compatible con Vercel** de forma nativa (Zero Configuration):
+
+1. Ve a [Vercel](https://vercel.com/) e inicia sesión.
+2. Haz clic en **"Add New Project"** > **"Project"**.
+3. Selecciona tu repositorio de GitHub `crist38/ficha-clinica`.
+4. Haz clic en **"Deploy"**.
+
+Cada vez que hagas un `git push` a la rama `main`, Vercel actualizará el sitio automáticamente.
+
+---
+
 ## 🌐 Despliegue en GitHub Pages
 
-Para publicar esta aplicación en GitHub Pages:
 1. Ve a los ajustes del repositorio en GitHub: **Settings > Pages**.
-2. En la sección **Build and deployment > Branch**, selecciona `main` o `master` y la carpeta `/ (root)`.
-3. Haz clic en **Save**. En pocos minutos estará disponible en `https://crist38.github.io/ficha-clinica/`.
+2. En **Build and deployment > Branch**, selecciona `main` y `/ (root)`.
+3. Haz clic en **Save**.
