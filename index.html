@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha Médica — Registro de Pacientes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4F7F5;
+    --card: #FFFFFF;
+    --ink: #1C2826;
+    --ink-light: #2D3E3B;
+    --muted: #5A6E69;
+    --muted-light: #889C97;
+    --border: #D3E0DC;
+    --border-hover: #A7C2BB;
+    
+    --teal-primary: #154D47;
+    --teal-hover: #0E3834;
+    --teal-light: #E7F3F1;
+    --teal-accent: #2C7A70;
+    
+    --sage: #DCEBE7;
+    --danger: #C0392B;
+    --danger-bg: #FDF2F0;
+    --danger-border: #F5C6CB;
+    --success: #277E4D;
+    --success-bg: #EEF8F2;
+    --success-border: #C3E6CB;
+
+    --shadow-sm: 0 2px 6px rgba(15, 35, 30, 0.04);
+    --shadow-md: 0 8px 24px rgba(15, 35, 30, 0.07);
+    --shadow-lg: 0 16px 36px rgba(15, 35, 30, 0.12);
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .brand-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--teal-primary);
+    color: #FFF;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .brand-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 1.85rem;
+    margin: 0;
+    color: var(--teal-primary);
+    letter-spacing: -0.01em;
+  }
+
+  header p {
+    margin: 0.15rem 0 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  @media (max-width: 880px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .card h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin: 0;
+    color: var(--teal-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .card h2 svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--teal-accent);
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .badge-mode {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    background: var(--teal-light);
+    color: var(--teal-primary);
+    letter-spacing: 0.03em;
+  }
+
+  .badge-mode.edit {
+    background: #FFF3CD;
+    color: #856404;
+  }
+
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.1rem;
+  }
+
+  @media (max-width: 580px) {
+    .grid2 { grid-template-columns: 1fr; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .field.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--ink-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .label-hint {
+    font-weight: 400;
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+
+  input, select, textarea {
+    font-family: inherit;
+    font-size: 0.92rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: #FAFCFB;
+    color: var(--ink);
+    outline: none;
+    transition: all 0.15s ease-in-out;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--teal-accent);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(44, 122, 112, 0.12);
+  }
+
+  input.invalid, select.invalid, textarea.invalid {
+    border-color: var(--danger);
+    background: var(--danger-bg);
+  }
+
+  input.invalid:focus, select.invalid:focus, textarea.invalid:focus {
+    box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .err {
+    font-size: 0.76rem;
+    color: var(--danger);
+    min-height: 1.1em;
+    font-weight: 500;
+  }
+
+  .char-counter {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 0.2rem;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  button {
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 0.62rem 1.15rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: #FFFFFF;
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    transition: all 0.15s ease-in-out;
+    user-select: none;
+  }
+
+  button:hover {
+    background: var(--sage);
+    border-color: var(--border-hover);
+  }
+
+  button:active {
+    transform: translateY(1px);
+  }
+
+  button.primary {
+    background: var(--teal-primary);
+    border-color: var(--teal-primary);
+    color: #FFFFFF;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(21, 77, 71, 0.2);
+  }
+
+  button.primary:hover {
+    background: var(--teal-hover);
+    border-color: var(--teal-hover);
+  }
+
+  button.danger {
+    background: #FFFFFF;
+    border-color: var(--danger-border);
+    color: var(--danger);
+  }
+
+  button.danger:hover {
+    background: var(--danger-bg);
+    border-color: var(--danger);
+  }
+
+  button.ghost {
+    background: transparent;
+    border-color: transparent;
+    color: var(--muted);
+  }
+
+  button.ghost:hover {
+    background: rgba(0,0,0,0.04);
+    color: var(--ink);
+  }
+
+  button.sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .search-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .search-row input {
+    flex: 1;
+  }
+
+  .list-counter {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status {
+    font-size: 0.85rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.25rem;
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .status.show { display: flex; }
+  .status.ok {
+    background: var(--success-bg);
+    color: var(--success);
+    border: 1px solid var(--success-border);
+  }
+  .status.warn {
+    background: var(--danger-bg);
+    color: var(--danger);
+    border: 1px solid var(--danger-border);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 480px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+  }
+
+  .list::-webkit-scrollbar {
+    width: 6px;
+  }
+  .list::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+  .list::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-light);
+  }
+
+  .patient-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    background: #FFFFFF;
+    transition: all 0.15s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .patient-card:hover {
+    border-color: var(--teal-accent);
+    background: var(--teal-light);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .patient-info .name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+
+  .patient-info .meta {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 3px;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .tag-age {
+    background: #EBF3F0;
+    color: var(--teal-primary);
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.74rem;
+    font-weight: 600;
+  }
+
+  .patient-actions {
+    display: flex;
+    gap: 0.3rem;
+    opacity: 0.8;
+  }
+
+  .patient-card:hover .patient-actions {
+    opacity: 1;
+  }
+
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    border-color: transparent;
+  }
+
+  .btn-icon:hover {
+    background: #FFFFFF;
+    color: var(--teal-primary);
+    border-color: var(--border);
+  }
+
+  .btn-icon.del:hover {
+    background: var(--danger-bg);
+    color: var(--danger);
+    border-color: var(--danger-border);
+  }
+
+  .empty {
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding: 2rem 1rem;
+    text-align: center;
+    background: #FAFCFB;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  .note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 1.4rem;
+    line-height: 1.5;
+    padding: 0.75rem 0.9rem;
+    background: #F8FAF9;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--teal-accent);
+  }
+
+  /* Modal Backdrop & Styles */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 30, 25, 0.45);
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    padding: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.15s ease-in-out;
+  }
+
+  .modal-backdrop.show {
+    display: flex;
+  }
+
+  .modal {
+    background: #FFFFFF;
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    max-width: 440px;
+    width: 100%;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .modal h3 {
+    margin: 0 0 0.6rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.25rem;
+    color: var(--teal-primary);
+  }
+
+  .modal p {
+    margin: 0 0 1.4rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .modal .actions {
+    margin-top: 0;
+    justify-content: flex-end;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          <path d="M12 8v6M9 11h6"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Ficha Médica</h1>
+        <p>Sistema de gestión y registro clínico de pacientes</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="btn-exportar" class="sm" title="Exportar copia de seguridad en JSON">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar JSON
+      </button>
+      <button id="btn-importar-trigger" class="sm" title="Importar registros desde JSON">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Importar JSON
+      </button>
+      <input type="file" id="import-file-input" accept=".json" class="hidden">
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Form Card -->
+    <div class="card">
+      <div class="card-header">
+        <h2>
+          <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M16 11h6"/></svg>
+          <span id="form-title">Nuevo Registro</span>
+        </h2>
+        <span id="form-mode-badge" class="badge-mode">Nuevo</span>
+      </div>
+
+      <div class="status" id="status"></div>
+
+      <div class="grid2">
+        <div class="field">
+          <label for="rut">RUT <span class="label-hint">Ej: 12.345.678-9</span></label>
+          <input id="rut" placeholder="12345678-9" autocomplete="off" maxlength="12">
+          <div class="err" id="err-rut"></div>
+        </div>
+
+        <div class="field">
+          <label for="estadoCivil">Estado Civil</label>
+          <select id="estadoCivil">
+            <option value="">Seleccione...</option>
+            <option value="Soltero/a">Soltero/a</option>
+            <option value="Casado/a">Casado/a</option>
+            <option value="Conviviente civil">Conviviente civil</option>
+            <option value="Divorciado/a">Divorciado/a</option>
+            <option value="Viudo/a">Viudo/a</option>
+          </select>
+          <div class="err" id="err-estadoCivil"></div>
+        </div>
+
+        <div class="field">
+          <label for="nombres">Nombres</label>
+          <input id="nombres" placeholder="María José" autocomplete="given-name">
+          <div class="err" id="err-nombres"></div>
+        </div>
+
+        <div class="field">
+          <label for="apellidos">Apellidos</label>
+          <input id="apellidos" placeholder="Pérez Soto" autocomplete="family-name">
+          <div class="err" id="err-apellidos"></div>
+        </div>
+
+        <div class="field full">
+          <label for="direccion">Dirección</label>
+          <input id="direccion" placeholder="Av. Siempre Viva 742, Depto 501">
+          <div class="err" id="err-direccion"></div>
+        </div>
+
+        <div class="field">
+          <label for="ciudad">Ciudad</label>
+          <input id="ciudad" placeholder="Santiago">
+          <div class="err" id="err-ciudad"></div>
+        </div>
+
+        <div class="field">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" placeholder="+56 9 1234 5678" type="tel">
+          <div class="err" id="err-telefono"></div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" placeholder="paciente@correo.cl" type="email">
+          <div class="err" id="err-email"></div>
+        </div>
+
+        <div class="field">
+          <label for="fechaNacimiento">Fecha de Nacimiento <span id="age-calc" class="label-hint"></span></label>
+          <input id="fechaNacimiento" type="date">
+          <div class="err" id="err-fechaNacimiento"></div>
+        </div>
+
+        <div class="field full">
+          <label for="comentarios">Comentarios u Observaciones Clínicas</label>
+          <textarea id="comentarios" maxlength="500" placeholder="Antecedentes médicos, alergias, observaciones relevantes..."></textarea>
+          <div style="display:flex; justify-content:space-between;">
+            <div class="err" id="err-comentarios"></div>
+            <div class="char-counter" id="char-counter">0 / 500</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="btn-guardar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Guardar Ficha
+        </button>
+        <button id="btn-limpiar" type="button">Limpiar Formulario</button>
+        <button class="danger hidden" id="btn-eliminar" type="button">Eliminar Ficha</button>
+        <button class="ghost" id="btn-cerrar" type="button">Cancelar</button>
+      </div>
+
+      <p class="note">
+        <strong>Nota de Privacidad:</strong> Los datos se almacenan localmente en el navegador (localStorage). Cada dispositivo cuenta con su propio registro independiente. Se recomienda realizar respaldos periódicos con el botón "Exportar JSON".
+      </p>
+    </div>
+
+    <!-- Search & Patients List Card -->
+    <div class="card">
+      <div class="card-header">
+        <h2>
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Buscar Paciente
+        </h2>
+      </div>
+
+      <div class="search-row">
+        <input id="buscar" placeholder="Buscar por apellido, nombre o RUT...">
+        <button id="btn-buscar">Buscar</button>
+      </div>
+
+      <div class="list-counter">
+        <span id="count-label">Cargando registros...</span>
+        <button id="btn-limpiar-busqueda" class="ghost sm hidden">Ver todos</button>
+      </div>
+
+      <div class="list" id="lista"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Overwrite / Delete Confirmation -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal">
+    <h3 id="modal-title">Confirmación</h3>
+    <p id="modal-text">¿Deseas realizar esta acción?</p>
+    <div class="actions">
+      <button class="primary" id="modal-confirm">Confirmar</button>
+      <button class="ghost" id="modal-cancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_PREFIX = 'ficha_medica::';
+
+const storage = {
+  async get(key) {
+    const raw = localStorage.getItem(STORAGE_PREFIX + key);
+    return raw === null ? null : { key, value: raw };
+  },
+  async set(key, value) {
+    localStorage.setItem(STORAGE_PREFIX + key, value);
+    return { key, value };
+  },
+  async delete(key) {
+    localStorage.removeItem(STORAGE_PREFIX + key);
+    return { key, deleted: true };
+  },
+  async list(prefix) {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(STORAGE_PREFIX + (prefix || ''))) {
+        keys.push(k.slice(STORAGE_PREFIX.length));
+      }
+    }
+    return { keys };
+  }
+};
+
+const fields = [
+  'rut', 'nombres', 'apellidos', 'direccion', 'ciudad',
+  'telefono', 'email', 'fechaNacimiento', 'estadoCivil', 'comentarios'
+];
+
+/* RUT Helper Functions */
+function normRut(v) {
+  return (v || '').replace(/[^0-9kK]/g, '').toUpperCase();
+}
+
+function formatRut(v) {
+  const clean = normRut(v);
+  if (clean.length < 2) return clean;
+  const body = clean.slice(0, -1);
+  const dv = clean.slice(-1);
+  const formattedBody = body.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return `${formattedBody}-${dv}`;
+}
+
+function validRutFormat(v) {
+  const clean = normRut(v);
+  return /^\d{7,8}[0-9K]$/.test(clean);
+}
+
+function rutCheckDigit(numPart) {
+  let sum = 0, mul = 2;
+  for (let i = numPart.length - 1; i >= 0; i--) {
+    sum += parseInt(numPart[i], 10) * mul;
+    mul = mul === 7 ? 2 : mul + 1;
+  }
+  const res = 11 - (sum % 11);
+  if (res === 11) return '0';
+  if (res === 10) return 'K';
+  return String(res);
+}
+
+function validRut(v) {
+  const clean = normRut(v);
+  if (!validRutFormat(clean)) return false;
+  const num = clean.slice(0, -1);
+  const dv = clean.slice(-1);
+  return rutCheckDigit(num) === dv;
+}
+
+function calculateAge(dateStr) {
+  if (!dateStr) return '';
+  const birthDate = new Date(dateStr + 'T00:00:00');
+  const today = new Date();
+  if (isNaN(birthDate.getTime()) || birthDate > today) return '';
+
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age >= 0 ? `${age} años` : '';
+}
+
+function validators() {
+  return {
+    rut: v => {
+      const clean = normRut(v);
+      if (!clean) return 'El RUT es obligatorio.';
+      if (!validRutFormat(clean)) return 'Formato esperado: 12.345.678-9.';
+      if (!validRut(clean)) return 'El dígito verificador del RUT no es válido.';
+      return '';
+    },
+    nombres: v => {
+      if (!v.trim()) return 'Los nombres son obligatorios.';
+      if (!/^[A-Za-zÀ-ÿ\s'.]{2,60}$/.test(v.trim())) return 'Ingresa nombres válidos (mín. 2 caracteres).';
+      return '';
+    },
+    apellidos: v => {
+      if (!v.trim()) return 'Los apellidos son obligatorios.';
+      if (!/^[A-Za-zÀ-ÿ\s'.]{2,60}$/.test(v.trim())) return 'Ingresa apellidos válidos (mín. 2 caracteres).';
+      return '';
+    },
+    direccion: v => {
+      if (!v.trim()) return 'La dirección es obligatoria.';
+      if (v.trim().length < 4) return 'Ingresa una dirección más completa.';
+      return '';
+    },
+    ciudad: v => {
+      if (!v.trim()) return 'La ciudad es obligatoria.';
+      if (!/^[A-Za-zÀ-ÿ\s'.]{2,40}$/.test(v.trim())) return 'Solo letras y espacios.';
+      return '';
+    },
+    telefono: v => {
+      if (!v.trim()) return 'El teléfono es obligatorio.';
+      const digits = v.replace(/[^0-9]/g, '');
+      if (digits.length < 8 || digits.length > 12) return 'Ingresa un teléfono válido (8 a 12 dígitos).';
+      return '';
+    },
+    email: v => {
+      if (!v.trim()) return 'El email es obligatorio.';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())) return 'Formato de email inválido.';
+      return '';
+    },
+    fechaNacimiento: v => {
+      if (!v) return 'La fecha de nacimiento es obligatoria.';
+      const d = new Date(v + 'T00:00:00');
+      const now = new Date();
+      if (d > now) return 'La fecha no puede ser futura.';
+      const ageYears = (now - d) / (1000 * 60 * 60 * 24 * 365.25);
+      if (ageYears > 120) return 'Revisa la fecha, supera 120 años.';
+      return '';
+    },
+    estadoCivil: v => v ? '' : 'Selecciona un estado civil.',
+    comentarios: v => v.length > 500 ? 'Máximo 500 caracteres.' : ''
+  };
+}
+
+function getFormData() {
+  const data = {};
+  fields.forEach(f => {
+    let val = document.getElementById(f).value;
+    if (f === 'rut') val = formatRut(val);
+    data[f] = val;
+  });
+  return data;
+}
+
+function setFormData(data = {}) {
+  fields.forEach(f => {
+    const el = document.getElementById(f);
+    if (el) {
+      if (f === 'rut' && data[f]) {
+        el.value = formatRut(data[f]);
+      } else {
+        el.value = data[f] || '';
+      }
+    }
+  });
+
+  const ageText = calculateAge(data.fechaNacimiento);
+  document.getElementById('age-calc').textContent = ageText ? `(${ageText})` : '';
+
+  const commentLength = (data.comentarios || '').length;
+  document.getElementById('char-counter').textContent = `${commentLength} / 500`;
+
+  if (data.rut) {
+    document.getElementById('form-title').textContent = 'Editar Registro';
+    document.getElementById('form-mode-badge').textContent = 'Edición';
+    document.getElementById('form-mode-badge').className = 'badge-mode edit';
+    document.getElementById('btn-eliminar').classList.remove('hidden');
+  } else {
+    document.getElementById('form-title').textContent = 'Nuevo Registro';
+    document.getElementById('form-mode-badge').textContent = 'Nuevo';
+    document.getElementById('form-mode-badge').className = 'badge-mode';
+    document.getElementById('btn-eliminar').classList.add('hidden');
+  }
+}
+
+function clearErrors() {
+  fields.forEach(f => {
+    const errEl = document.getElementById('err-' + f);
+    const inputEl = document.getElementById(f);
+    if (errEl) errEl.textContent = '';
+    if (inputEl) inputEl.classList.remove('invalid');
+  });
+}
+
+function validateForm() {
+  const data = getFormData();
+  const rules = validators();
+  let ok = true;
+  fields.forEach(f => {
+    const msg = rules[f](data[f]);
+    const errEl = document.getElementById('err-' + f);
+    const inputEl = document.getElementById(f);
+    if (errEl) errEl.textContent = msg;
+    if (inputEl) inputEl.classList.toggle('invalid', !!msg);
+    if (msg) ok = false;
+  });
+  return ok;
+}
+
+function showStatus(msg, kind) {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'status show ' + kind;
+  clearTimeout(showStatus._t);
+  showStatus._t = setTimeout(() => el.classList.remove('show'), 4500);
+}
+
+function keyFor(rut) {
+  return 'paciente:' + normRut(rut);
+}
+
+async function saveRecord(data, overwrite) {
+  const key = keyFor(data.rut);
+  if (!overwrite) {
+    try {
+      const existing = await storage.get(key);
+      if (existing) {
+        openModal(
+          'Sobrescribir Ficha',
+          `Ya existe una ficha clínica registrada para el RUT ${data.rut}. ¿Deseas actualizar sus datos?`,
+          async () => { await saveRecord(data, true); }
+        );
+        return;
+      }
+    } catch (e) {}
+  }
+  try {
+    const result = await storage.set(key, JSON.stringify(data));
+    if (!result) {
+      showStatus('No se pudo guardar el registro. Intenta nuevamente.', 'warn');
+      return;
+    }
+    showStatus('Ficha clínica guardada exitosamente.', 'ok');
+    setFormData({});
+    clearErrors();
+    await refreshList(document.getElementById('buscar').value);
+  } catch (e) {
+    showStatus('Error al guardar: ' + e.message, 'warn');
+  }
+}
+
+async function deleteRecord(rut) {
+  if (!rut) return;
+  const key = keyFor(rut);
+  try {
+    await storage.delete(key);
+    showStatus('Ficha médica eliminada correctamente.', 'ok');
+    setFormData({});
+    clearErrors();
+    await refreshList(document.getElementById('buscar').value);
+  } catch (e) {
+    showStatus('Error al eliminar: ' + e.message, 'warn');
+  }
+}
+
+let modalCallback = null;
+function openModal(title, text, onConfirm) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-text').textContent = text;
+  modalCallback = onConfirm;
+  document.getElementById('modal-backdrop').classList.add('show');
+}
+
+function closeModal() {
+  modalCallback = null;
+  document.getElementById('modal-backdrop').classList.remove('show');
+}
+
+async function refreshList(filterQuery = '') {
+  const listEl = document.getElementById('lista');
+  const countLabel = document.getElementById('count-label');
+  const clearFilterBtn = document.getElementById('btn-limpiar-busqueda');
+
+  listEl.innerHTML = '<div class="empty">Buscando registros...</div>';
+  try {
+    const listing = await storage.list('paciente:');
+    const keys = (listing && listing.keys) || [];
+    
+    if (keys.length === 0) {
+      listEl.innerHTML = '<div class="empty">No hay pacientes registrados aún.</div>';
+      countLabel.textContent = '0 pacientes registrados';
+      clearFilterBtn.classList.add('hidden');
+      return;
+    }
+
+    const records = [];
+    for (const k of keys) {
+      try {
+        const r = await storage.get(k);
+        if (r && r.value) {
+          records.push(JSON.parse(r.value));
+        }
+      } catch (e) {}
+    }
+
+    const query = filterQuery.trim().toLowerCase();
+    const filtered = query
+      ? records.filter(r => 
+          (r.apellidos || '').toLowerCase().includes(query) ||
+          (r.nombres || '').toLowerCase().includes(query) ||
+          normRut(r.rut).includes(normRut(query))
+        )
+      : records;
+
+    if (query) {
+      clearFilterBtn.classList.remove('hidden');
+      countLabel.textContent = `${filtered.length} de ${records.length} pacientes encontrados`;
+    } else {
+      clearFilterBtn.classList.add('hidden');
+      countLabel.textContent = `${records.length} paciente${records.length === 1 ? '' : 's'} registrado${records.length === 1 ? '' : 's'}`;
+    }
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = '<div class="empty">No se encontraron pacientes que coincidan con la búsqueda.</div>';
+      return;
+    }
+
+    filtered.sort((a, b) => (a.apellidos || '').localeCompare(b.apellidos || ''));
+    listEl.innerHTML = '';
+
+    filtered.forEach(r => {
+      const ageStr = calculateAge(r.fechaNacimiento);
+      const row = document.createElement('div');
+      row.className = 'patient-card';
+      row.innerHTML = `
+        <div class="patient-info">
+          <div class="name">${escapeHtml(r.apellidos)}, ${escapeHtml(r.nombres)}</div>
+          <div class="meta">
+            <span>RUT ${escapeHtml(r.rut)}</span>
+            ${r.ciudad ? `<span>· ${escapeHtml(r.ciudad)}</span>` : ''}
+            ${ageStr ? `<span class="tag-age">${ageStr}</span>` : ''}
+          </div>
+        </div>
+        <div class="patient-actions">
+          <button class="btn-icon del" title="Eliminar paciente" data-rut="${escapeHtml(r.rut)}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+          </button>
+        </div>
+      `;
+
+      row.addEventListener('click', (e) => {
+        if (e.target.closest('.del')) return;
+        setFormData(r);
+        clearErrors();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      const delBtn = row.querySelector('.del');
+      if (delBtn) {
+        delBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openModal(
+            'Eliminar Registro',
+            `¿Estás seguro de que deseas eliminar permanentemente la ficha clínica de ${r.nombres} ${r.apellidos} (RUT ${r.rut})?`,
+            async () => { await deleteRecord(r.rut); }
+          );
+        });
+      }
+
+      listEl.appendChild(row);
+    });
+  } catch (e) {
+    listEl.innerHTML = '<div class="empty">No se pudo cargar la lista de pacientes.</div>';
+    countLabel.textContent = 'Error al cargar';
+  }
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+/* Event Listeners */
+document.getElementById('rut').addEventListener('blur', e => {
+  if (e.target.value) {
+    e.target.value = formatRut(e.target.value);
+  }
+});
+
+document.getElementById('fechaNacimiento').addEventListener('change', e => {
+  const ageText = calculateAge(e.target.value);
+  document.getElementById('age-calc').textContent = ageText ? `(${ageText})` : '';
+});
+
+document.getElementById('comentarios').addEventListener('input', e => {
+  document.getElementById('char-counter').textContent = `${e.target.value.length} / 500`;
+});
+
+document.getElementById('btn-guardar').addEventListener('click', async () => {
+  if (!validateForm()) return;
+  await saveRecord(getFormData(), false);
+});
+
+document.getElementById('btn-limpiar').addEventListener('click', () => {
+  setFormData({});
+  clearErrors();
+});
+
+document.getElementById('btn-eliminar').addEventListener('click', () => {
+  const rut = document.getElementById('rut').value;
+  const nombres = document.getElementById('nombres').value;
+  const apellidos = document.getElementById('apellidos').value;
+  if (!rut) return;
+
+  openModal(
+    'Eliminar Ficha',
+    `¿Estás seguro de que deseas eliminar permanentemente la ficha de ${nombres} ${apellidos} (RUT ${rut})?`,
+    async () => { await deleteRecord(rut); }
+  );
+});
+
+document.getElementById('btn-cerrar').addEventListener('click', () => {
+  setFormData({});
+  clearErrors();
+});
+
+document.getElementById('btn-buscar').addEventListener('click', () => {
+  refreshList(document.getElementById('buscar').value);
+});
+
+document.getElementById('buscar').addEventListener('input', e => {
+  refreshList(e.target.value);
+});
+
+document.getElementById('btn-limpiar-busqueda').addEventListener('click', () => {
+  document.getElementById('buscar').value = '';
+  refreshList('');
+});
+
+/* Export / Import JSON */
+document.getElementById('btn-exportar').addEventListener('click', async () => {
+  try {
+    const listing = await storage.list('paciente:');
+    const keys = (listing && listing.keys) || [];
+    const records = [];
+    for (const k of keys) {
+      const r = await storage.get(k);
+      if (r && r.value) records.push(JSON.parse(r.value));
+    }
+    const blob = new Blob([JSON.stringify(records, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ficha_clinica_backup_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showStatus('Respaldo exportado correctamente.', 'ok');
+  } catch (e) {
+    showStatus('Error al exportar registros.', 'warn');
+  }
+});
+
+document.getElementById('btn-importar-trigger').addEventListener('click', () => {
+  document.getElementById('import-file-input').click();
+});
+
+document.getElementById('import-file-input').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async event => {
+    try {
+      const data = JSON.parse(event.target.result);
+      if (!Array.isArray(data)) throw new Error('El archivo debe ser un arreglo de registros JSON.');
+      let count = 0;
+      for (const item of data) {
+        if (item && item.rut) {
+          await storage.set(keyFor(item.rut), JSON.stringify(item));
+          count++;
+        }
+      }
+      showStatus(`Se importaron ${count} registros exitosamente.`, 'ok');
+      await refreshList('');
+    } catch (err) {
+      showStatus('Error al importar archivo: ' + err.message, 'warn');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+});
+
+/* Modal actions */
+document.getElementById('modal-confirm').addEventListener('click', async () => {
+  if (modalCallback) await modalCallback();
+  closeModal();
+});
+document.getElementById('modal-cancel').addEventListener('click', closeModal);
+
+/* Initial Load */
+refreshList('');
+</script>
+</body>
+</html>
